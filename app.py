@@ -20,7 +20,6 @@ with st.form("form_prediksi"):
 
 # Prediksi
 if submitted:
-    # Encoding lokasi manual (harus sesuai preprocessing model)
     lokasi_encoded = {
         'DKI Jakarta': 0,
         'Jawa Barat': 1,
@@ -29,11 +28,13 @@ if submitted:
         'Banten': 4
     }
 
-    data_input = pd.DataFrame({
-        'price': [harga],
-        'rating': [rating],
-        'address': [lokasi_encoded.get(lokasi, 0)]
-    })
+    input_data = [{
+        'price': harga,
+        'rating': rating,
+        'address': lokasi_encoded.get(lokasi, 0)
+    }]
+    data_input = pd.DataFrame(input_data)
 
+    # Pastikan nama kolom dan urutan sama persis dengan saat training
     prediksi = model.predict(data_input)[0]
     st.success(f"📦 Estimasi produk terjual: **{int(prediksi):,} unit**")
